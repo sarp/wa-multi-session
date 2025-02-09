@@ -53,6 +53,10 @@ const Defaults_1 = require("../Defaults");
 const save_media_1 = require("../Utils/save-media");
 const Error_1 = require("../Error");
 const message_status_1 = require("../Utils/message-status");
+const https_proxy_agent_1 = require("https-proxy-agent");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: ".env.local" });
+dotenv_1.default.config();
 const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
@@ -72,6 +76,7 @@ const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, funct
             logger: P,
             markOnlineOnConnect: false,
             browser: baileys_1.Browsers.ubuntu("Chrome"),
+            agent: new https_proxy_agent_1.HttpsProxyAgent(`http://${process.env.PROXY_USERNAME}:${process.env.PROXY_PASSWORD}@${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`),
         });
         sessions.set(sessionId, Object.assign({}, sock));
         try {
@@ -164,6 +169,7 @@ const startSessionWithPairingCode = (sessionId, options) => __awaiter(void 0, vo
             logger: P,
             markOnlineOnConnect: false,
             browser: baileys_1.Browsers.ubuntu("Chrome"),
+            agent: new https_proxy_agent_1.HttpsProxyAgent(`http://${process.env.PROXY_USERNAME}:${process.env.PROXY_PASSWORD}@${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`),
         });
         sessions.set(sessionId, Object.assign({}, sock));
         try {

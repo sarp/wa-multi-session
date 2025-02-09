@@ -22,6 +22,10 @@ import {
 } from "../Utils/save-media";
 import { WhatsappError } from "../Error";
 import { parseMessageStatusCodeToReadable } from "../Utils/message-status";
+import { HttpsProxyAgent } from "https-proxy-agent";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const sessions: Map<string, WASocket> = new Map();
 
@@ -52,6 +56,7 @@ export const startSession = async (
       logger: P,
       markOnlineOnConnect: false,
       browser: Browsers.ubuntu("Chrome"),
+      agent: new HttpsProxyAgent(`http://${process.env.PROXY_USERNAME}:${process.env.PROXY_PASSWORD}@${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`),
     });
     sessions.set(sessionId, { ...sock });
     try {
@@ -152,6 +157,7 @@ export const startSessionWithPairingCode = async (
       logger: P,
       markOnlineOnConnect: false,
       browser: Browsers.ubuntu("Chrome"),
+      agent: new HttpsProxyAgent(`http://${process.env.PROXY_USERNAME}:${process.env.PROXY_PASSWORD}@${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`),
     });
     sessions.set(sessionId, { ...sock });
     try {
