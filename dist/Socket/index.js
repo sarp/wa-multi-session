@@ -58,7 +58,7 @@ const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
 const P = require("pino")({
-    level: "debug",
+    level: "silent",
 });
 const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (sessionId = "mysession", options = { printQR: true }, agent) {
     if (isSessionExistAndRunning(sessionId))
