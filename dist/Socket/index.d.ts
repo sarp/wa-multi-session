@@ -14,7 +14,7 @@ export declare const startWhatsapp: (sessionId?: string, options?: StartSessionP
 export declare const deleteSession: (sessionId: string) => Promise<void>;
 export declare const getAllSession: () => string[];
 export declare const getSession: (key: string) => WASocket | undefined;
-export declare const loadSessionsFromStorage: () => void;
+export declare const loadSessionsFromStorage: (sessionIdToProxy: Record<string, string>) => void;
 export declare const onMessageReceived: (listener: (msg: MessageReceived) => any) => void;
 export declare const onQRUpdated: (listener: ({ sessionId, qr }: {
     sessionId: string;

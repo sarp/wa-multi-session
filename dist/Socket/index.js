@@ -53,9 +53,7 @@ const Defaults_1 = require("../Defaults");
 const save_media_1 = require("../Utils/save-media");
 const Error_1 = require("../Error");
 const message_status_1 = require("../Utils/message-status");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: ".env.local" });
-dotenv_1.default.config();
+const https_proxy_agent_1 = require("https-proxy-agent");
 const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
@@ -69,10 +67,10 @@ const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, funct
     const startSocket = () => __awaiter(void 0, void 0, void 0, function* () {
         const { state, saveCreds } = yield (0, baileys_1.useMultiFileAuthState)(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME, sessionId + Defaults_1.CREDENTIALS.PREFIX));
         if (agent) {
-            console.log(`using proxy agent: ${JSON.stringify(agent)}`);
+            console.log(`startSession using proxy agent: ${JSON.stringify(agent)}`);
         }
         else {
-            console.log("no proxy agent");
+            console.log("startSession no proxy agent");
         }
         const sock = (0, baileys_1.default)({
             version,
@@ -167,6 +165,12 @@ const startSessionWithPairingCode = (sessionId, options, agent) => __awaiter(voi
     const startSocket = () => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         const { state, saveCreds } = yield (0, baileys_1.useMultiFileAuthState)(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME, sessionId + Defaults_1.CREDENTIALS.PREFIX));
+        if (agent) {
+            console.log(`startSessionWithPairingCode using proxy agent: ${JSON.stringify(agent)}`);
+        }
+        else {
+            console.log("startSessionWithPairingCode no proxy agent");
+        }
         const sock = (0, baileys_1.default)({
             version,
             printQRInTerminal: false,
@@ -291,7 +295,7 @@ const shouldLoadSession = (sessionId) => {
     }
     return false;
 };
-const loadSessionsFromStorage = () => {
+const loadSessionsFromStorage = (sessionIdToProxy) => {
     if (!fs_1.default.existsSync(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME))) {
         fs_1.default.mkdirSync(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME));
     }
@@ -303,7 +307,7 @@ const loadSessionsFromStorage = () => {
             const sessionId = dir.split("_")[0];
             if (!shouldLoadSession(sessionId))
                 continue;
-            (0, exports.startSession)(sessionId);
+            (0, exports.startSession)(sessionId, { printQR: false }, new https_proxy_agent_1.HttpsProxyAgent(sessionIdToProxy[sessionId]));
         }
     }));
 };

@@ -23,12 +23,7 @@ import {
 import { WhatsappError } from "../Error";
 import { parseMessageStatusCodeToReadable } from "../Utils/message-status";
 import { HttpsProxyAgent } from "https-proxy-agent";
-import dotenv from "dotenv";
-import assert from "assert";
 import type { Agent } from 'https';
-
-dotenv.config({ path: ".env.local" });
-dotenv.config();
 
 const sessions: Map<string, WASocket> = new Map();
 
@@ -54,9 +49,9 @@ export const startSession = async (
       path.resolve(CREDENTIALS.DIR_NAME, sessionId + CREDENTIALS.PREFIX)
     );
     if(agent){
-      console.log(`using proxy agent: ${JSON.stringify(agent)}`)
+      console.log(`startSession using proxy agent: ${JSON.stringify(agent)}`)
     } else {
-      console.log("no proxy agent")
+      console.log("startSession no proxy agent")
     }
     const sock: WASocket = makeWASocket({
       version,
@@ -160,6 +155,11 @@ export const startSessionWithPairingCode = async (
     const { state, saveCreds } = await useMultiFileAuthState(
       path.resolve(CREDENTIALS.DIR_NAME, sessionId + CREDENTIALS.PREFIX)
     );
+    if(agent){
+      console.log(`startSessionWithPairingCode using proxy agent: ${JSON.stringify(agent)}`)
+    } else {
+      console.log("startSessionWithPairingCode no proxy agent")
+    }
     const sock: WASocket = makeWASocket({
       version,
       printQRInTerminal: false,
@@ -304,7 +304,7 @@ const shouldLoadSession = (sessionId: string): boolean => {
   return false;
 };
 
-export const loadSessionsFromStorage = () => {
+export const loadSessionsFromStorage = (sessionIdToProxy: Record<string,string>) => {
   if (!fs.existsSync(path.resolve(CREDENTIALS.DIR_NAME))) {
     fs.mkdirSync(path.resolve(CREDENTIALS.DIR_NAME));
   }
@@ -315,7 +315,7 @@ export const loadSessionsFromStorage = () => {
     for (const dir of dirs) {
       const sessionId = dir.split("_")[0];
       if (!shouldLoadSession(sessionId)) continue;
-      startSession(sessionId);
+      startSession(sessionId, {printQR: false}, new HttpsProxyAgent(sessionIdToProxy[sessionId]));
     }
   });
 };

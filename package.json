@@ -18,7 +18,6 @@
     "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.1",
     "@whiskeysockets/baileys": "^6.7.9",
-    "dotenv": "^16.4.7",
     "https-proxy-agent": "^7.0.6",
     "mime": "^3.0.0",
     "pino": "^9.5.0",
