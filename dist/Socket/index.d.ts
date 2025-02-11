@@ -1,15 +1,16 @@
 import { WASocket } from "@whiskeysockets/baileys";
 import type { MessageReceived, MessageUpdated, StartSessionParams, StartSessionWithPairingCodeParams } from "../Types";
-export declare const startSession: (sessionId?: string, options?: StartSessionParams) => Promise<WASocket>;
+import type { Agent } from 'https';
+export declare const startSession: (sessionId?: string, options?: StartSessionParams, agent?: Agent) => Promise<WASocket>;
 /**
  *
  * @deprecated Use startSession method instead
  */
-export declare const startSessionWithPairingCode: (sessionId: string, options: StartSessionWithPairingCodeParams) => Promise<WASocket>;
+export declare const startSessionWithPairingCode: (sessionId: string, options: StartSessionWithPairingCodeParams, agent?: Agent) => Promise<WASocket>;
 /**
  * @deprecated Use startSession method instead
  */
-export declare const startWhatsapp: (sessionId?: string, options?: StartSessionParams) => Promise<WASocket>;
+export declare const startWhatsapp: (sessionId?: string, options?: StartSessionParams, agent?: Agent) => Promise<WASocket>;
 export declare const deleteSession: (sessionId: string) => Promise<void>;
 export declare const getAllSession: () => string[];
 export declare const getSession: (key: string) => WASocket | undefined;
