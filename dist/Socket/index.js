@@ -68,6 +68,12 @@ const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, funct
     const { version } = yield (0, baileys_1.fetchLatestBaileysVersion)();
     const startSocket = () => __awaiter(void 0, void 0, void 0, function* () {
         const { state, saveCreds } = yield (0, baileys_1.useMultiFileAuthState)(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME, sessionId + Defaults_1.CREDENTIALS.PREFIX));
+        if (agent) {
+            console.log(`using proxy agent: ${JSON.stringify(agent)}`);
+        }
+        else {
+            console.log("no proxy agent");
+        }
         const sock = (0, baileys_1.default)({
             version,
             printQRInTerminal: options.printQR,
