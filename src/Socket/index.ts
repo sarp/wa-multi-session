@@ -32,7 +32,7 @@ const callback: Map<string, Function> = new Map();
 const retryCount: Map<string, number> = new Map();
 
 const P = require("pino")({
-  level: "debug",
+  level: "silent",
 });
 
 export const startSession = async (
