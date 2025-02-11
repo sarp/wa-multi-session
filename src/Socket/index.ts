@@ -24,6 +24,9 @@ import { WhatsappError } from "../Error";
 import { parseMessageStatusCodeToReadable } from "../Utils/message-status";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import dotenv from "dotenv";
+import assert from "assert";
+import type { Agent } from 'https';
+
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
@@ -39,7 +42,8 @@ const P = require("pino")({
 
 export const startSession = async (
   sessionId = "mysession",
-  options: StartSessionParams = { printQR: true }
+  options: StartSessionParams = { printQR: true },
+  agent?: Agent
 ): Promise<WASocket> => {
   if (isSessionExistAndRunning(sessionId))
     throw new WhatsappError(Messages.sessionAlreadyExist(sessionId));
@@ -56,7 +60,7 @@ export const startSession = async (
       logger: P,
       markOnlineOnConnect: false,
       browser: Browsers.ubuntu("Chrome"),
-      agent: new HttpsProxyAgent(`http://${process.env.PROXY_USERNAME}:${process.env.PROXY_PASSWORD}@${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`),
+      agent: agent
     });
     sessions.set(sessionId, { ...sock });
     try {
@@ -140,7 +144,8 @@ export const startSession = async (
  */
 export const startSessionWithPairingCode = async (
   sessionId: string,
-  options: StartSessionWithPairingCodeParams
+  options: StartSessionWithPairingCodeParams,
+  agent?: Agent
 ): Promise<WASocket> => {
   if (isSessionExistAndRunning(sessionId))
     throw new WhatsappError(Messages.sessionAlreadyExist(sessionId));
@@ -157,7 +162,7 @@ export const startSessionWithPairingCode = async (
       logger: P,
       markOnlineOnConnect: false,
       browser: Browsers.ubuntu("Chrome"),
-      agent: new HttpsProxyAgent(`http://${process.env.PROXY_USERNAME}:${process.env.PROXY_PASSWORD}@${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`),
+      agent: agent,
     });
     sessions.set(sessionId, { ...sock });
     try {
