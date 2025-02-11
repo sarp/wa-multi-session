@@ -53,6 +53,11 @@ export const startSession = async (
     const { state, saveCreds } = await useMultiFileAuthState(
       path.resolve(CREDENTIALS.DIR_NAME, sessionId + CREDENTIALS.PREFIX)
     );
+    if(agent){
+      console.log(`using proxy agent: ${JSON.stringify(agent)}`)
+    } else {
+      console.log("no proxy agent")
+    }
     const sock: WASocket = makeWASocket({
       version,
       printQRInTerminal: options.printQR,
