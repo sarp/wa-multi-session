@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readMessage = exports.sendTyping = exports.sendSticker = exports.sendVoiceNote = exports.sendDocument = exports.sendVideo = exports.sendImage = exports.sendTextMessage = void 0;
+exports.readMessage = exports.sendTyping = exports.sendSticker = exports.sendVoiceNote = exports.sendDocument = exports.sendVideo = exports.sendImage = exports.sendTextMessage = exports.checkIsOnWhatsapp = void 0;
 const Defaults_1 = require("../Defaults");
 const Socket_1 = require("../Socket");
 const Utils_1 = require("../Utils");
@@ -31,6 +31,19 @@ const create_delay_1 = require("../Utils/create-delay");
 const is_exist_1 = require("../Utils/is-exist");
 const mime_1 = __importDefault(require("mime"));
 const Error_1 = require("../Error");
+const checkIsOnWhatsapp = (_a) => __awaiter(void 0, [_a], void 0, function* ({ sessionId, to, isGroup = false }) {
+    const session = (0, Socket_1.getSession)(sessionId);
+    if (!session)
+        throw new Error_1.WhatsappError(Defaults_1.Messages.sessionNotFound(sessionId));
+    to = (0, Utils_1.phoneToJid)({ to, isGroup });
+    const isRegistered = yield (0, is_exist_1.isExist)({
+        sessionId,
+        to,
+        isGroup,
+    });
+    return isRegistered;
+});
+exports.checkIsOnWhatsapp = checkIsOnWhatsapp;
 const sendTextMessage = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var { sessionId, to, text = "", isGroup = false } = _a, props = __rest(_a, ["sessionId", "to", "text", "isGroup"]);
     const session = (0, Socket_1.getSession)(sessionId);

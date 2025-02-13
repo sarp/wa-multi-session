@@ -13,6 +13,22 @@ import { isExist } from "../Utils/is-exist";
 import mime from "mime";
 import { WhatsappError } from "../Error";
 
+export const checkIsOnWhatsapp = async ({
+  sessionId,
+  to,
+  isGroup = false
+}: SendMessageTypes): Promise<boolean> => {
+  const session = getSession(sessionId);
+  if (!session) throw new WhatsappError(Messages.sessionNotFound(sessionId));
+  to = phoneToJid({ to, isGroup });
+  const isRegistered = await isExist({
+    sessionId,
+    to,
+    isGroup,
+  });
+  return isRegistered;
+};
+
 export const sendTextMessage = async ({
   sessionId,
   to,
