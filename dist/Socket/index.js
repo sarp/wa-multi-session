@@ -54,11 +54,12 @@ const save_media_1 = require("../Utils/save-media");
 const Error_1 = require("../Error");
 const message_status_1 = require("../Utils/message-status");
 const https_proxy_agent_1 = require("https-proxy-agent");
+const flatted_1 = require("flatted");
 const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
 const printState = () => {
-    const result = `sessions: ${JSON.stringify(Array.from(sessions.entries()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
+    const result = `sessions: ${(0, flatted_1.stringify)(Array.from(sessions.entries()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
     console.log(result);
     return result;
 };
