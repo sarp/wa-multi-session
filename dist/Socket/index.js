@@ -45,7 +45,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.onPairingCode = exports.onMessageUpdate = exports.onConnecting = exports.onDisconnected = exports.onConnected = exports.onQRUpdated = exports.onMessageReceived = exports.loadSessionsFromStorage = exports.getSession = exports.getAllSession = exports.deleteSession = exports.startWhatsapp = exports.startSessionWithPairingCode = exports.startSession = void 0;
+exports.onPairingCode = exports.onMessageUpdate = exports.onConnecting = exports.onDisconnected = exports.onConnected = exports.onQRUpdated = exports.onMessageReceived = exports.loadSessionsFromStorage = exports.getSession = exports.getAllSession = exports.deleteSession = exports.startWhatsapp = exports.startSessionWithPairingCode = exports.startSession = exports.printState = void 0;
 const baileys_1 = __importStar(require("@whiskeysockets/baileys"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
@@ -57,6 +57,12 @@ const https_proxy_agent_1 = require("https-proxy-agent");
 const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
+const printState = () => {
+    const result = `sessions: ${JSON.stringify(Array.from(sessions.keys()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
+    console.log(result);
+    return result;
+};
+exports.printState = printState;
 const P = require("pino")({
     level: "silent",
 });
@@ -106,6 +112,12 @@ const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, funct
                         if (code != baileys_1.DisconnectReason.loggedOut && retryAttempt < 10) {
                             shouldRetry = true;
                         }
+                        else {
+                            if (code != baileys_1.DisconnectReason.loggedOut) {
+                                console.log(`${sessionId} max retry attempts reached`);
+                            }
+                        }
+                        console.log(`session: ${sessionId} connection close code: ${code} retryAttempt: ${retryAttempt} shouldRetry: ${shouldRetry}`);
                         if (shouldRetry) {
                             retryAttempt++;
                             retryCount.set(sessionId, retryAttempt);
@@ -147,7 +159,7 @@ const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, funct
             return sock;
         }
         catch (error) {
-            // console.log("SOCKET ERROR", error);
+            console.log("SOCKET ERROR", error);
             return sock;
         }
     });
@@ -209,9 +221,15 @@ const startSessionWithPairingCode = (sessionId, options, agent) => __awaiter(voi
                         if (code != baileys_1.DisconnectReason.loggedOut && retryAttempt < 10) {
                             shouldRetry = true;
                         }
+                        else {
+                            if (code != baileys_1.DisconnectReason.loggedOut) {
+                                console.log(`${sessionId} max retry attempts reached`);
+                            }
+                        }
                         if (shouldRetry) {
                             retryAttempt++;
                         }
+                        console.log(`session: ${sessionId} connection close code: ${code} retryAttempt: ${retryAttempt} shouldRetry: ${shouldRetry}`);
                         if (shouldRetry) {
                             retryCount.set(sessionId, retryAttempt);
                             startSocket();
@@ -248,7 +266,7 @@ const startSessionWithPairingCode = (sessionId, options, agent) => __awaiter(voi
             return sock;
         }
         catch (error) {
-            // console.log("SOCKET ERROR", error);
+            console.log("SOCKET ERROR", error);
             return sock;
         }
     });
@@ -260,6 +278,7 @@ exports.startSessionWithPairingCode = startSessionWithPairingCode;
  */
 exports.startWhatsapp = exports.startSession;
 const deleteSession = (sessionId) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(`deleteSession: ${sessionId}`);
     const session = (0, exports.getSession)(sessionId);
     try {
         yield (session === null || session === void 0 ? void 0 : session.logout());

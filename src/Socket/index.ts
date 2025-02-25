@@ -31,6 +31,12 @@ const callback: Map<string, Function> = new Map();
 
 const retryCount: Map<string, number> = new Map();
 
+export const printState = (): string => {
+  const result = `sessions: ${JSON.stringify(Array.from(sessions.keys()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
+  console.log(result);
+  return result;
+}
+
 const P = require("pino")({
   level: "silent",
 });
@@ -85,7 +91,12 @@ export const startSession = async (
             let shouldRetry;
             if (code != DisconnectReason.loggedOut && retryAttempt < 10) {
               shouldRetry = true;
+            } else {
+              if (code != DisconnectReason.loggedOut) {
+                console.log(`${sessionId} max retry attempts reached`);
+              }
             }
+            console.log(`session: ${sessionId} connection close code: ${code} retryAttempt: ${retryAttempt} shouldRetry: ${shouldRetry}`);
             if (shouldRetry) {
               retryAttempt++;
               retryCount.set(sessionId, retryAttempt);
@@ -131,7 +142,7 @@ export const startSession = async (
       });
       return sock;
     } catch (error) {
-      // console.log("SOCKET ERROR", error);
+      console.log("SOCKET ERROR", error);
       return sock;
     }
   };
@@ -197,10 +208,15 @@ export const startSessionWithPairingCode = async (
             let shouldRetry;
             if (code != DisconnectReason.loggedOut && retryAttempt < 10) {
               shouldRetry = true;
+            } else {
+              if (code != DisconnectReason.loggedOut) {
+                console.log(`${sessionId} max retry attempts reached`);
+              }
             }
             if (shouldRetry) {
               retryAttempt++;
             }
+            console.log(`session: ${sessionId} connection close code: ${code} retryAttempt: ${retryAttempt} shouldRetry: ${shouldRetry}`);
             if (shouldRetry) {
               retryCount.set(sessionId, retryAttempt);
               startSocket();
@@ -241,7 +257,7 @@ export const startSessionWithPairingCode = async (
       });
       return sock;
     } catch (error) {
-      // console.log("SOCKET ERROR", error);
+      console.log("SOCKET ERROR", error);
       return sock;
     }
   };
@@ -254,6 +270,7 @@ export const startSessionWithPairingCode = async (
 export const startWhatsapp = startSession;
 
 export const deleteSession = async (sessionId: string) => {
+  console.log(`deleteSession: ${sessionId}`);
   const session = getSession(sessionId);
   try {
     await session?.logout();

@@ -1,6 +1,7 @@
 import { WASocket } from "@whiskeysockets/baileys";
 import type { MessageReceived, MessageUpdated, StartSessionParams, StartSessionWithPairingCodeParams } from "../Types";
 import type { Agent } from 'https';
+export declare const printState: () => string;
 export declare const startSession: (sessionId?: string, options?: StartSessionParams, agent?: Agent) => Promise<WASocket>;
 /**
  *
