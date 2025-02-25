@@ -54,14 +54,16 @@ const save_media_1 = require("../Utils/save-media");
 const Error_1 = require("../Error");
 const message_status_1 = require("../Utils/message-status");
 const https_proxy_agent_1 = require("https-proxy-agent");
-const flatted_1 = require("flatted");
 const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
 const printState = () => {
-    const result = `sessions: ${(0, flatted_1.stringify)(Array.from(sessions.entries()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
-    console.log(result);
-    return result;
+    sessions.forEach((value, key) => {
+        console.log(`Session ${key} is ${value === undefined ? 'object' : 'undefined'}`);
+    });
+    retryCount.forEach((_, key) => {
+        console.log(`Retry count for session ${key} is ${retryCount.get(key)}`);
+    });
 };
 exports.printState = printState;
 const P = require("pino")({

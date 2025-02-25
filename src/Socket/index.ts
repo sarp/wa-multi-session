@@ -32,10 +32,13 @@ const callback: Map<string, Function> = new Map();
 
 const retryCount: Map<string, number> = new Map();
 
-export const printState = (): string => {
-  const result = `sessions: ${stringify(Array.from(sessions.entries()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
-  console.log(result);
-  return result;
+export const printState = (): void => {
+  sessions.forEach((value, key) => {
+    console.log(`Session ${key} is ${value === undefined ? 'object' : 'undefined'}`);
+  });
+  retryCount.forEach((_, key) => {
+    console.log(`Retry count for session ${key} is ${retryCount.get(key)}`);
+  });
 }
 
 const P = require("pino")({
