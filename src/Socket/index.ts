@@ -32,7 +32,7 @@ const callback: Map<string, Function> = new Map();
 const retryCount: Map<string, number> = new Map();
 
 export const printState = (): string => {
-  const result = `sessions: ${JSON.stringify(Array.from(sessions.keys()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
+  const result = `sessions: ${JSON.stringify(Array.from(sessions.entries()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
   console.log(result);
   return result;
 }

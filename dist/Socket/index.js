@@ -58,7 +58,7 @@ const sessions = new Map();
 const callback = new Map();
 const retryCount = new Map();
 const printState = () => {
-    const result = `sessions: ${JSON.stringify(Array.from(sessions.keys()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
+    const result = `sessions: ${JSON.stringify(Array.from(sessions.entries()))}\nretryCount: ${JSON.stringify(Object.fromEntries(retryCount))}`;
     console.log(result);
     return result;
 };
