@@ -145,7 +145,7 @@ const startSession = (...args_1) => __awaiter(void 0, [...args_1], void 0, funct
                 if (events["messages.update"]) {
                     const msg = events["messages.update"][0];
                     const data = Object.assign({ sessionId: sessionId, messageStatus: (0, message_status_1.parseMessageStatusCodeToReadable)(msg.update.status) }, msg);
-                    (_m = callback.get(Defaults_1.CALLBACK_KEY.ON_MESSAGE_UPDATED)) === null || _m === void 0 ? void 0 : _m(sessionId, data);
+                    (_m = callback.get(Defaults_1.CALLBACK_KEY.ON_MESSAGE_UPDATED)) === null || _m === void 0 ? void 0 : _m(data);
                     (_o = options.onMessageUpdated) === null || _o === void 0 ? void 0 : _o.call(options, data);
                 }
                 if (events["messages.upsert"]) {

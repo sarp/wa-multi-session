@@ -127,7 +127,7 @@ export const startSession = async (
             messageStatus: parseMessageStatusCodeToReadable(msg.update.status!),
             ...msg,
           };
-          callback.get(CALLBACK_KEY.ON_MESSAGE_UPDATED)?.(sessionId, data);
+          callback.get(CALLBACK_KEY.ON_MESSAGE_UPDATED)?.(data);
           options.onMessageUpdated?.(data);
         }
         if (events["messages.upsert"]) {
