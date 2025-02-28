@@ -59,7 +59,7 @@ const callback = new Map();
 const retryCount = new Map();
 const printState = () => {
     sessions.forEach((value, key) => {
-        console.log(`Session ${key} is ${value === undefined ? 'object' : 'undefined'}`);
+        console.log(`Session ${key} is ${value === undefined ? 'undefined' : 'object'}`);
     });
     retryCount.forEach((_, key) => {
         console.log(`Retry count for session ${key} is ${retryCount.get(key)}`);
@@ -254,7 +254,7 @@ const startSessionWithPairingCode = (sessionId, options, agent) => __awaiter(voi
                 if (events["messages.update"]) {
                     const msg = events["messages.update"][0];
                     const data = Object.assign({ sessionId: sessionId, messageStatus: (0, message_status_1.parseMessageStatusCodeToReadable)(msg.update.status) }, msg);
-                    (_h = callback.get(Defaults_1.CALLBACK_KEY.ON_MESSAGE_UPDATED)) === null || _h === void 0 ? void 0 : _h(sessionId, data);
+                    (_h = callback.get(Defaults_1.CALLBACK_KEY.ON_MESSAGE_UPDATED)) === null || _h === void 0 ? void 0 : _h(data);
                 }
                 if (events["messages.upsert"]) {
                     const msg = (_j = events["messages.upsert"]

@@ -24,7 +24,6 @@ import { WhatsappError } from "../Error";
 import { parseMessageStatusCodeToReadable } from "../Utils/message-status";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import type { Agent } from 'https';
-import { stringify } from 'flatted'
 
 const sessions: Map<string, WASocket> = new Map();
 
@@ -34,7 +33,7 @@ const retryCount: Map<string, number> = new Map();
 
 export const printState = (): void => {
   sessions.forEach((value, key) => {
-    console.log(`Session ${key} is ${value === undefined ? 'object' : 'undefined'}`);
+    console.log(`Session ${key} is ${value === undefined ? 'undefined' : 'object'}`);
   });
   retryCount.forEach((_, key) => {
     console.log(`Retry count for session ${key} is ${retryCount.get(key)}`);
@@ -245,7 +244,7 @@ export const startSessionWithPairingCode = async (
             messageStatus: parseMessageStatusCodeToReadable(msg.update.status!),
             ...msg,
           };
-          callback.get(CALLBACK_KEY.ON_MESSAGE_UPDATED)?.(sessionId, data);
+          callback.get(CALLBACK_KEY.ON_MESSAGE_UPDATED)?.(data);
         }
         if (events["messages.upsert"]) {
           const msg = events["messages.upsert"]
