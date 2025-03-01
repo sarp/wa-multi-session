@@ -272,6 +272,34 @@ export const startSessionWithPairingCode = async (
  */
 export const startWhatsapp = startSession;
 
+export const stopSession = async (sessionId: string) => {
+  const session = getSession(sessionId);
+  if (session) {
+    session.end(undefined);
+    sessions.delete(sessionId);
+  } else {
+    console.log(`stopSession: ${sessionId} not found`);
+  }
+}
+
+export const listStoredSessions = () => {
+  if (!fs.existsSync(path.resolve(CREDENTIALS.DIR_NAME))) {
+    fs.mkdirSync(path.resolve(CREDENTIALS.DIR_NAME));
+  }
+  const numbers: string[] = [];
+  fs.readdir(path.resolve(CREDENTIALS.DIR_NAME), async (err, dirs) => {
+    if (err) {
+      throw err;
+    }
+
+    for (const dir of dirs) {
+      const sessionId = dir.split("_")[0];
+      numbers.push(sessionId);
+    }
+   });
+   return numbers;
+}
+
 export const deleteSession = async (sessionId: string) => {
   console.log(`deleteSession: ${sessionId}`);
   const session = getSession(sessionId);
