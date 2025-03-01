@@ -45,7 +45,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.onPairingCode = exports.onMessageUpdate = exports.onConnecting = exports.onDisconnected = exports.onConnected = exports.onQRUpdated = exports.onMessageReceived = exports.loadSessionsFromStorage = exports.getSession = exports.getAllSession = exports.deleteSession = exports.startWhatsapp = exports.startSessionWithPairingCode = exports.startSession = exports.printState = void 0;
+exports.onPairingCode = exports.onMessageUpdate = exports.onConnecting = exports.onDisconnected = exports.onConnected = exports.onQRUpdated = exports.onMessageReceived = exports.loadSessionsFromStorage = exports.getSession = exports.getAllSession = exports.deleteSession = exports.listStoredSessions = exports.stopSession = exports.startWhatsapp = exports.startSessionWithPairingCode = exports.startSession = exports.printState = void 0;
 const baileys_1 = __importStar(require("@whiskeysockets/baileys"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
@@ -280,6 +280,34 @@ exports.startSessionWithPairingCode = startSessionWithPairingCode;
  * @deprecated Use startSession method instead
  */
 exports.startWhatsapp = exports.startSession;
+const stopSession = (sessionId) => __awaiter(void 0, void 0, void 0, function* () {
+    const session = (0, exports.getSession)(sessionId);
+    if (session) {
+        session.end(undefined);
+        sessions.delete(sessionId);
+    }
+    else {
+        console.log(`stopSession: ${sessionId} not found`);
+    }
+});
+exports.stopSession = stopSession;
+const listStoredSessions = () => {
+    if (!fs_1.default.existsSync(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME))) {
+        fs_1.default.mkdirSync(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME));
+    }
+    const numbers = [];
+    fs_1.default.readdir(path_1.default.resolve(Defaults_1.CREDENTIALS.DIR_NAME), (err, dirs) => __awaiter(void 0, void 0, void 0, function* () {
+        if (err) {
+            throw err;
+        }
+        for (const dir of dirs) {
+            const sessionId = dir.split("_")[0];
+            numbers.push(sessionId);
+        }
+    }));
+    return numbers;
+};
+exports.listStoredSessions = listStoredSessions;
 const deleteSession = (sessionId) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`deleteSession: ${sessionId}`);
     const session = (0, exports.getSession)(sessionId);

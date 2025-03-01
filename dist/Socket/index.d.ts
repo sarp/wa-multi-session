@@ -12,6 +12,8 @@ export declare const startSessionWithPairingCode: (sessionId: string, options: S
  * @deprecated Use startSession method instead
  */
 export declare const startWhatsapp: (sessionId?: string, options?: StartSessionParams, agent?: Agent) => Promise<WASocket>;
+export declare const stopSession: (sessionId: string) => Promise<void>;
+export declare const listStoredSessions: () => string[];
 export declare const deleteSession: (sessionId: string) => Promise<void>;
 export declare const getAllSession: () => string[];
 export declare const getSession: (key: string) => WASocket | undefined;
