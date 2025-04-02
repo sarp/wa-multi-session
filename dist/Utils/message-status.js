@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseMessageStatusCodeToReadable = void 0;
-const baileys_1 = require("@whiskeysockets/baileys");
+const baileys_1 = require("baileys");
 const parseMessageStatusCodeToReadable = (code) => {
     if (code == baileys_1.proto.WebMessageInfo.Status.PENDING)
         return "pending";

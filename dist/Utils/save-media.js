@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveDocumentHandler = exports.saveVideoHandler = exports.saveImageHandler = void 0;
-const baileys_1 = require("@whiskeysockets/baileys");
+const baileys_1 = require("baileys");
 const error_1 = __importDefault(require("./error"));
 const promises_1 = __importDefault(require("fs/promises"));
 const saveMedia = (path, data) => __awaiter(void 0, void 0, void 0, function* () {

@@ -1,4 +1,4 @@
-import { proto } from "@whiskeysockets/baileys";
+import { proto } from "baileys";
 import { SendMediaTypes, SendMessageTypes, SendReadTypes, SendTypingTypes } from "../Types";
 export declare const checkIsOnWhatsapp: ({ sessionId, to, isGroup }: SendMessageTypes) => Promise<boolean>;
 export declare const sendTextMessage: ({ sessionId, to, text, isGroup, ...props }: SendMessageTypes) => Promise<proto.WebMessageInfo | undefined>;

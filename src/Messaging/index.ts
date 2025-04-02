@@ -1,4 +1,4 @@
-import { proto } from "@whiskeysockets/baileys";
+import { proto } from "baileys";
 import { Messages } from "../Defaults";
 import { getSession } from "../Socket";
 import {

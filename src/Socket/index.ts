@@ -4,7 +4,7 @@ import makeWASocket, {
   fetchLatestBaileysVersion,
   useMultiFileAuthState,
   WASocket,
-} from "@whiskeysockets/baileys";
+} from "baileys";
 import path from "path";
 import { Boom } from "@hapi/boom";
 import fs from "fs";
